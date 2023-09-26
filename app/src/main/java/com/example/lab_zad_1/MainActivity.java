@@ -16,28 +16,83 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void hideTextViews(View view){
-        TextView textName = findViewById(R.id.textView);
-        TextView textGroup = findViewById(R.id.textView2);
+    public void onPlus(View view){
+        TextView firstInput = findViewById(R.id.firstInput);
+        TextView secondInput = findViewById(R.id.secondInput);
 
-        if(textName.getVisibility() == View.VISIBLE && textGroup.getVisibility() == View.VISIBLE){
-            textName.setVisibility(View.INVISIBLE);
-            textGroup.setVisibility(View.INVISIBLE);
-        }
-        else{
-            textName.setVisibility(View.VISIBLE);
-            textGroup.setVisibility(View.VISIBLE);
-        }
+        Integer firstValue = Integer.parseInt(firstInput.getText().toString());
+        Integer secondValue = Integer.parseInt(secondInput.getText().toString());
+        Integer answerValue = firstValue + secondValue;
+
+        CharSequence answerValueString = answerValue.toString();
+        TextView answerInput = findViewById(R.id.answerInput);
+        TextView znak = findViewById(R.id.textView4);
+        znak.setText("+");
+
+        answerInput.setText(answerValueString);
+
     }
 
-    public void hideImg(View view){
-        ImageView img = findViewById(R.id.imageView);
+    public void onMinus(View view){
+        TextView firstInput = findViewById(R.id.firstInput);
+        TextView secondInput = findViewById(R.id.secondInput);
 
-        if(img.getVisibility() == View.VISIBLE && img.getVisibility() == View.VISIBLE){
-            img.setVisibility(View.INVISIBLE);
-        }
-        else{
-            img.setVisibility(View.VISIBLE);
-        }
+        Integer firstValue = Integer.parseInt(firstInput.getText().toString());
+        Integer secondValue = Integer.parseInt(secondInput.getText().toString());
+        Integer answerValue = firstValue - secondValue;
+
+        CharSequence answerValueString = answerValue.toString();
+        TextView answerInput = findViewById(R.id.answerInput);
+        TextView znak = findViewById(R.id.textView4);
+        znak.setText("-");
+
+        answerInput.setText(answerValueString);
     }
+
+    public void onDivide(View view){
+        TextView firstInput = findViewById(R.id.firstInput);
+        TextView secondInput = findViewById(R.id.secondInput);
+
+        Integer firstValue = Integer.parseInt(firstInput.getText().toString());
+        Integer secondValue = Integer.parseInt(secondInput.getText().toString());
+        Integer answerValue = firstValue / secondValue;
+
+        CharSequence answerValueString = answerValue.toString();
+        TextView answerInput = findViewById(R.id.answerInput);
+        TextView znak = findViewById(R.id.textView4);
+        znak.setText("/");
+
+        answerInput.setText(answerValueString);
+    }
+
+    public void onMultiply(View view){
+        TextView firstInput = findViewById(R.id.firstInput);
+        TextView secondInput = findViewById(R.id.secondInput);
+
+        Integer firstValue = Integer.parseInt(firstInput.getText().toString());
+        Integer secondValue = Integer.parseInt(secondInput.getText().toString());
+        Integer answerValue = firstValue * secondValue;
+
+        CharSequence answerValueString = answerValue.toString();
+        TextView answerInput = findViewById(R.id.answerInput);
+        TextView znak = findViewById(R.id.textView4);
+        znak.setText("*");
+
+        answerInput.setText(answerValueString);
+    }
+
+    public void onClear(View view){
+        TextView firstInput = findViewById(R.id.firstInput);
+        TextView secondInput = findViewById(R.id.secondInput);
+        TextView answerInput = findViewById(R.id.answerInput);
+        TextView znak = findViewById(R.id.textView4);
+        firstInput.setText("0");
+        secondInput.setText("0");
+        answerInput.setText("0");
+        znak.setText(" ");
+
+    }
+
+
+
 }
