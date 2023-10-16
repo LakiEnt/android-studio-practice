@@ -17,112 +17,42 @@
         android:layout_marginTop="5dp"
         app:columnCount="3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridLayoutN"
-        app:orientation="horizontal">
+        app:layout_constraintTop_toTopOf="parent"
+        app:orientation="vertical">
 
         <Button
-            android:id="@+id/plusButton"
+            android:id="@+id/textToast2sec"
             android:layout_width="wrap_content"
-            android:layout_height="97dp"
-            android:onClick="onPlus"
-            android:text="+"
-            app:layout_column="0"
+            android:layout_height="wrap_content"
+            android:onClick="onTextToast2sec"
+            android:text="textToast 2 sec"
+            app:layout_column="1"
             app:layout_columnSpan="1"
             app:layout_row="1"
-            app:layout_rowSpan="3"></Button>
+            app:layout_rowSpan="1"></Button>
 
         <Button
-            android:id="@+id/minusButton"
-            android:layout_width="132dp"
-            android:onClick="onMinus"
-            android:text="-"
+            android:id="@+id/textToast3_5sec"
+            android:layout_width="wrap_content"
+            android:onClick="onTextToast3_5sec"
+            android:text="textToast 3.5 sec"
             app:layout_columnSpan="1"></Button>
 
         <Button
-            android:id="@+id/divideButton"
+            android:id="@+id/textToastDialog"
             android:layout_width="133dp"
-            android:onClick="onDivide"
-            android:text="/"
+            android:onClick="onTextToastDialog"
+            android:text="dialog"
             app:layout_columnSpan="1"></Button>
 
         <Button
-            android:id="@+id/multiplyButton"
+            android:id="@+id/textToastChoose"
             android:layout_width="265dp"
-            android:onClick="onMultiply"
-            android:text="*"
-            app:layout_columnSpan="2"></Button>
+            android:onClick="onTextToastChoose"
+            android:text="dialog choose"
+            app:layout_columnSpan="1"></Button>
 
-        <Button
-            android:id="@+id/clearButton"
-            android:layout_width="131dp"
-            android:onClick="onClear"
-            android:text="C"
-            app:layout_rowSpan="3"></Button>
 
-    </androidx.gridlayout.widget.GridLayout>
-
-    <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/gridLayoutN"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="124dp"
-        app:columnCount="5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/firstInput"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:ems="10"
-            android:inputType="numberSigned"
-            tools:layout_editor_absoluteX="27dp"
-            tools:layout_editor_absoluteY="37dp" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text=""
-            tools:layout_editor_absoluteX="88dp"
-            tools:layout_editor_absoluteY="37dp" />
-
-        <EditText
-            android:id="@+id/secondInput"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:inputType="numberSigned"
-            app:layout_column="2"
-            app:layout_row="0"
-            tools:layout_editor_absoluteX="140dp"
-            tools:layout_editor_absoluteY="37dp" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="39dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="═"
-            app:layout_column="3"
-            app:layout_row="0"
-            tools:layout_editor_absoluteX="200dp"
-            tools:layout_editor_absoluteY="52dp" />
-
-        <EditText
-            android:id="@+id/answerInput"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:clickable="false"
-            android:cursorVisible="false"
-            android:ems="10"
-            android:focusable="false"
-            android:inputType="numberSigned"
-            tools:layout_editor_absoluteX="236dp"
-            tools:layout_editor_absoluteY="52dp" />
     </androidx.gridlayout.widget.GridLayout>
 
 
