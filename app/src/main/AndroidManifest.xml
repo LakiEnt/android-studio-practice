@@ -13,6 +13,24 @@
         android:theme="@style/Theme.Labzad1"
         tools:targetApi="31">
         <activity
+            android:name=".DayActivity"
+            android:exported="false"
+            android:label="@string/title_activity_day"
+            android:theme="@style/Theme.Labzad1" />
+        <activity
+            android:name=".MorningActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EveningActivity"
+            android:exported="false"
+            android:label="@string/title_activity_morning2"
+            android:theme="@style/Theme.Labzad1" />
+        <activity
+            android:name=".NightActivity"
+            android:exported="false"
+            android:label="@string/title_activity_morning2"
+            android:theme="@style/Theme.Labzad1" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
