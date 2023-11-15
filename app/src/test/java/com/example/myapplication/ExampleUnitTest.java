@@ -1,4 +1,4 @@
-package com.example.lab_zad_1;
+package com.example.myapplication;
 
 import org.junit.Test;
 
