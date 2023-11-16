@@ -1,91 +1,70 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.textclassifier.TextLinks;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.Manifest;
+import android.widget.TextView;
 
-import com.journeyapps.barcodescanner.ScanContract;
-import com.journeyapps.barcodescanner.ScanOptions;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
+import java.io.IOException;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
-    private ImageView image;
+    private TextView textView;
     private Button button;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        image = findViewById(R.id.imageView);
+        textView = findViewById(R.id.textView);
         button = findViewById(R.id.button);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{
-                            Manifest.permission.CAMERA
-                    },100);
-                }
-                else {
-                    ScanOptions options = new ScanOptions();
-                    options.setPrompt("Скан кода");
-                    options.setBeepEnabled(true);
-                    options.setOrientationLocked(true);
-                    options.setCaptureActivity(CaptureAct.class);
+                OkHttpHandler handler = new OkHttpHandler();
+                handler.execute();
 
-                    barLauncher.launch(options);
-
-                }
-//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                startActivityForResult(intent, 100);
             }
         });
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 100) {
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            image.setImageBitmap(bitmap);
+    public class OkHttpHandler extends AsyncTask<Void, Void, String>{
+
+        @Override
+        protected String doInBackground(Void ... voids) {
+            Request.Builder builder = new Request.Builder();
+
+            Request request = builder.url("https://fakestoreapi.com/products/1").get().build();
+
+            OkHttpClient client = new OkHttpClient().newBuilder().build();
+
+            try {
+                Response response = client.newCall(request).execute();
+                JSONObject object = new JSONObject(response.body().string());
+
+                String fullstring = "Название товара:" + "\n" + object.getString("title") + "\n" + "Цена товара:" + "\n" + object.getString("price");
+                return fullstring;
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        @Override
+        protected void onPostExecute(String o){
+            super.onPostExecute(o);
+            textView.setText(o);
         }
     }
-    ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(),result ->{
-        if (result.getContents()!=null){
-              String qrText = result.getContents().toString();
-//              String qrText = "123";
-
-
-            if(qrText == "улица") {
-                Intent intent = new Intent(MainActivity.this, StreetActivity.class);
-                startActivity(intent);
-            } else if (qrText == "аптека" ) {
-                Intent intent = new Intent(MainActivity.this, HealActivity.class);
-                startActivity(intent);
-            } else if (qrText == "фонарь") {
-                Intent intent = new Intent(MainActivity.this, LightActivity.class);
-                startActivity(intent);
-            }
-            else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Нет такой страницы");
-                builder.setMessage(qrText);
-                builder.show();
-            }
-        }
-    });
 }
