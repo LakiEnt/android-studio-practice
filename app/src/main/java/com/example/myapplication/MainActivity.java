@@ -1,111 +1,78 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import java.util.ArrayList;
-import java.util.HashMap;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 
 
 public class MainActivity extends AppCompatActivity {
-    private ListView listView;
-    private DBHelper helper;
-    private SQLiteDatabase database;
-    private Button food_btn,clothes_btn,game_btn;
+    private Button login_btn;
+    GoogleSignInOptions gso;
+    GoogleSignInClient gsc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        listView=findViewById(R.id.listView1);
-        food_btn=findViewById(R.id.button2);
-        clothes_btn=findViewById(R.id.button);
-        game_btn=findViewById(R.id.button3);
-        helper=new DBHelper(getApplicationContext());
-        try{
-            database=helper.getWritableDatabase();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
 
-        clothes_btn.setOnClickListener(new View.OnClickListener() {
+        login_btn = findViewById(R.id.button_auth);
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail()
+                .build();
+        gsc = GoogleSignIn.getClient(this, gso);
+
+
+        login_btn.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View view) {
-                ArrayList<HashMap<String,String>> clothes = new ArrayList<>();
-                HashMap<String,String> animal;
-                Cursor cursor = database.rawQuery("SELECT id,name,quantity FROM clothes",null);
-                cursor.moveToFirst();
-                while(!cursor.isAfterLast()){
-                    animal=new HashMap<>();
-                    animal.put("name", cursor.getString(1));
-                    animal.put("quantity", cursor.getString(2));
-                    clothes.add(animal);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-
-                SimpleAdapter adapter = new SimpleAdapter(
-                        getApplicationContext(),clothes, android.R.layout.simple_list_item_2,
-                        new String[]{"name","quantity"}, new int[]{android.R.id.text1,android.R.id.text2}
-
-                );
-                listView.setAdapter(adapter);
-            }
-        });
-
-        game_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArrayList<HashMap<String,String>> games = new ArrayList<>();
-                HashMap<String,String> game;
-                Cursor cursor = database.rawQuery("SELECT id,name,quantity FROM games",null);
-                cursor.moveToFirst();
-                while(!cursor.isAfterLast()){
-                    game=new HashMap<>();
-                    game.put("name", cursor.getString(1));
-                    game.put("quantity", cursor.getString(2));
-                    games.add(game);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-
-                SimpleAdapter adapter = new SimpleAdapter(
-                        getApplicationContext(),games, android.R.layout.simple_list_item_2,
-                        new String[]{"name","quantity"}, new int[]{android.R.id.text1,android.R.id.text2}
-
-                );
-                listView.setAdapter(adapter);
-            }
-        });
-
-        food_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArrayList<HashMap<String,String>> foods = new ArrayList<>();
-                HashMap<String,String> food;
-                Cursor cursor = database.rawQuery("SELECT id,name,quantity FROM foods",null);
-                cursor.moveToFirst();
-                while(!cursor.isAfterLast()){
-                    food=new HashMap<>();
-                    food.put("name", cursor.getString(1));
-                    food.put("quantity", cursor.getString(2));
-                    foods.add(food);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-
-                SimpleAdapter adapter = new SimpleAdapter(
-                        getApplicationContext(),foods, android.R.layout.simple_list_item_2,
-                        new String[]{"name","quantity"}, new int[]{android.R.id.text1,android.R.id.text2}
-
-                );
-                listView.setAdapter(adapter);
+            public void onClick(View view){
+                Intent intent = gsc.getSignInIntent();
+                GoogleSignInLauncher.launch(intent);
             }
         });
     }
+    ActivityResultLauncher<Intent> GoogleSignInLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>(){
+        @Override
+        public  void onActivityResult(ActivityResult result) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+            try {
+                task.getResult(ApiException.class);
+                Toast toast = Toast.makeText(getApplicationContext(), "Вход успешен", Toast.LENGTH_LONG);
+                toast.show();
+
+                GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+
+                if (account != null) {
+                    String name = account.getDisplayName();
+                    String email = account.getEmail();
+                    Toast toast_account = Toast.makeText(getApplicationContext(), "Добро пожаловать," + name + "(" + email + ")", Toast.LENGTH_LONG);
+                    toast_account.show();
+
+                    Intent intent = new Intent(MainActivity.this, AccountActivity.class);
+                    intent.putExtra("name", name);
+                    intent.putExtra("email", email);
+                    startActivity(intent);
+                }
+
+            }
+            catch (ApiException e) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Ошибка входа", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
+
+    });
 }

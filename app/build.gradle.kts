@@ -39,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation ("com.google.android.gms:play-services-auth:20.7.02")
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
